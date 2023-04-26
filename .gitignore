@@ -1,0 +1,18 @@
+# Compiled Object files
+*.obj
+*.slo
+*.lo
+*.o
+*.obj
+*.layout
+Debug
+
+# mac filesystem related files
+*.DS_STORE
+
+# IDE useless files
+*.cscope_file_list
+*.depend
+
+# No need to push my history
+history.txt
