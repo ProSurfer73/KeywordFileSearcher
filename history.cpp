@@ -86,43 +86,38 @@ void History::pushHistory(const std::string& name, const std::string& value, boo
 
     if(p != nullptr)
     {
-        // Let's first check if this entry does not already exist
+        ////////
+        // 1. Delete existing items.
+
         for(auto it=p->begin(); it!=p->end(); ++it)
         {
             if((!caseInsensitive && *it == value)
              ||(caseInsensitive && equalInsensitive(value, *it)))
             {
-                p->push_front(std::move(*it));
                 p->erase(it);
-
-                // Let's save the file
-                if(!saveToFile(HISTORY_FILEPATH))
-                    std::cout << "Can't save history !" << std::endl;
 
                 return;
             }
         }
 
-        if(p->size()>=MAX_HISTORY_ENTRY)
-        {
-            // Let's first try to erase already existing item
-            bool hasBeenDeleted = false;
-            for(auto it1 = p->begin(); it1 != p->end() && hasBeenDeleted ; ++it1) {
-                for(auto it2 = p->begin() ; it2 != p->end() && hasBeenDeleted ; ++it2) {
-                    // If we have seperate items having the same value
-                    if(it1 != it2 && *it1 == *it2) {
-                        it1 = p->erase(it1);
-                        hasBeenDeleted = true;
-                    }
-                }
-            }
+        ////////
+        // 2. Push the new element to the front.
 
-            if(!hasBeenDeleted)
-                p->pop_back();
+        p->push_front(value);
+
+
+        ///////
+        // 3. Delete the last element if there are too many elements.
+
+        if(p->size()>MAX_HISTORY_ENTRY)
+        {
+            p->pop_back();
         }
 
-        // Let's push front
-        p->push_front(value);
+        //////
+        // 4. Let's save history (if a change has been done).
+        if(!saveToFile(HISTORY_FILEPATH))
+            std::cout << "Can't save history !" << std::endl;
     }
     else
     {
