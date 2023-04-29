@@ -73,6 +73,9 @@ bool hasEndingWhatever(const std::string& fullString, const std::string& ending)
 // we consider the characters to be case insensitive.
 bool equalInsensitive(const std::string& str1, const std::string& str2)
 {
+    if(str1.size() != str2.size())
+        return false;
+
     bool sameString = true;
 
     for(unsigned i=0; i<str1.size(); ++i)
