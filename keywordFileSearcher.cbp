@@ -33,6 +33,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="background.cpp" />
+		<Unit filename="background.hpp" />
 		<Unit filename="closestr.cpp" />
 		<Unit filename="closestr.hpp" />
 		<Unit filename="filesystem.cpp" />

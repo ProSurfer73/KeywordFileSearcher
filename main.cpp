@@ -10,13 +10,13 @@
 #include "history.hpp"
 #include "keywords.hpp"
 #include "operators.hpp"
+#include "background.hpp"
 
 using namespace std;
 
 
 // Let's define the absolute path to Notepad++ inside the program.
 #define NOTEPADPP_ABSOLUTE_PATH "C:\\Programs\\Notepad++\\notepad++.exe"
-
 
 
 void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vector<std::string>& extensions)
@@ -104,6 +104,18 @@ void showHelp()
     cout << "openall => open all the files found at the right line in notepad++.\n" << endl;
 }
 
+void taskExploreDirectory(void *data[])
+{
+    explore_directory(*(static_cast<std::string*>(data[0])),
+                      *((std::vector<std::string>*)data[1]));
+}
+
+void taskFilterPathEnding(void *data[])
+{
+    filterFilepathByEnding(*((std::vector<std::string>*)data[0]),
+                           *((std::vector<std::string>*)data[1]));
+}
+
 bool launchProgram(History& history);
 
 int main()
@@ -139,6 +151,7 @@ bool launchProgram(History& history)
     std::cout << "Please type the directory: ";
 
     string input;
+    BackgroundTasksManager background;
 
     getline(cin, input);
 
@@ -160,7 +173,9 @@ bool launchProgram(History& history)
 
     stringvec fileCollection;
 
-    std::thread thread(explore_directory, input, std::ref(fileCollection) );
+    void *arg1[] = {&input, &fileCollection};
+    background.addTask( taskExploreDirectory, arg1);
+
 
 
 
@@ -238,9 +253,12 @@ bool launchProgram(History& history)
 
     if(!extensionsToKeep.empty())
     {
-        thread.join();
-        //std::cout << "size: " << fileCollection.size() << std::endl;
-        thread = std::thread(filterFilepathByEnding, std::ref(fileCollection), std::ref(extensionsToKeep));
+        // let's launch the path ending filtering task.
+        void *arg2[] = {
+            &fileCollection,
+            &extensionsToKeep
+        };
+        background.addTask(taskFilterPathEnding, arg2);
     }
 
 
@@ -262,12 +280,12 @@ bool launchProgram(History& history)
     // search mode
     if(input == "1")
     {
-        thread.join();
+        background.join();
         nb = searchKeywords(fileCollection, results, keywords, sop, cout, warnings);
     }
     else if(input == "1+")
     {
-        thread.join();
+        background.join();
 
         if(keywords.empty())
             nb = searchKeywords(fileCollection, results, keywords, sop, cout, warnings);
@@ -289,7 +307,7 @@ bool launchProgram(History& history)
         cout << "add localising number to it ? (type 'y' if okay)" << endl;
         getline(cin, input);
 
-        thread.join();
+        background.join();
 
         //
         nb = replaceKeyword(fileCollection, keywords.front(), str2.c_str(), cout, sop, (input[0]=='y'), warnings);
