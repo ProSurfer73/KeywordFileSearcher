@@ -155,7 +155,11 @@ bool History::tryPossibilities(std::string& userInput, const std::string& name)
 
             if(choice >= 1 && choice <= p->size())
             {
+                // let's replace the shortcut by its string.
                 userInput = (*p)[choice-1];
+
+                // let's put this string at the beginning of the history.
+                pushHistory(name, userInput, false);
             }
 
             return true;
