@@ -40,7 +40,7 @@ struct SpecialOperators analyseKeyword(std::string& keyword)
 
     // 2. Let's delete these operators from the string itself.
 
-    for(int i=0; i<nb; ++i)
+    for(unsigned i=0; i<nb; ++i)
         keyword.erase(keyword.begin());
 
     // 3. Let's tamper the string.

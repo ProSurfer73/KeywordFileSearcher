@@ -45,6 +45,8 @@ unsigned searchKeywordsWithLines(stringvec& fileCollection, stringvec& results, 
  * \param fileCollection the file collection.
  * \param keywordSearched the keyword we want to see replaced.
  * \param keywordReplaced the keyword that is going to replace the old one.
+ * \param output the output stream where the file paths where the replacements occured will be written.
+ * \param sop
  * \return the number of files in which the keyword was replaced.
  */
 unsigned replaceKeyword(const stringvec& fileCollection, const string& keywordSearched,

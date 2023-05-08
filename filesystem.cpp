@@ -8,41 +8,8 @@
 
 #include "filesystem.hpp"
 #include "operators.hpp"
+#include "closestr.hpp"
 
-
-
-void replace_all(
-    std::string& s,
-    std::string const& toReplace,
-    std::string const& replaceWith
-) {
-    std::ostringstream oss;
-    std::size_t pos = 0;
-    std::size_t prevPos = pos;
-
-    while (true) {
-        prevPos = pos;
-        pos = s.find(toReplace, pos);
-        if (pos == std::string::npos)
-            break;
-        oss << s.substr(prevPos, pos - prevPos);
-        oss << replaceWith;
-        pos += toReplace.size();
-    }
-
-    oss << s.substr(prevPos);
-    s = oss.str();
-}
-
-
-static bool hasEnding (std::string const &fullString, std::string const &ending)
-{
-    if (fullString.length() >= ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-    } else {
-        return false;
-    }
-}
 
 #if (defined(_WIN32) || defined(_WIN64))
 

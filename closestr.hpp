@@ -38,4 +38,12 @@ bool hasEndingWhatever(const std::string& fullString, const std::string& ending)
   */
 bool equalInsensitive(const std::string& str1, const std::string& str2);
 
+/** \brief replace a string by another string inside of a string.
+ *
+ * \param s the string to be modified.
+ * \param toReplace the text to will be deleted and replaced.
+ * \param replaceWith the text we are going to replace with the old one.
+ */
+void replace_all(std::string& s, std::string const& toReplace, std::string const& replaceWith);
+
 #endif // CLOSESTR_HPP

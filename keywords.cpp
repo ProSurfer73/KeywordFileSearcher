@@ -82,7 +82,7 @@ unsigned searchKeywordsWithLines(stringvec& fileCollection, stringvec& results, 
 
 /** \brief Replace keywords (can add occurence number)
  *
- * \param
+ * \param fileCol
  * \param
  * \return
  *

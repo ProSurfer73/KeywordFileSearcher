@@ -1,4 +1,5 @@
 #include <cstring>
+#include <sstream>
 #include "closestr.hpp"
 
 #ifdef ENABLE_CLOSESTR
@@ -85,4 +86,27 @@ bool equalInsensitive(const std::string& str1, const std::string& str2)
     }
 
     return sameString;
+}
+
+void replace_all(
+    std::string& s,
+    std::string const& toReplace,
+    std::string const& replaceWith
+) {
+    std::ostringstream oss;
+    std::size_t pos = 0;
+    std::size_t prevPos = pos;
+
+    while (true) {
+        prevPos = pos;
+        pos = s.find(toReplace, pos);
+        if (pos == std::string::npos)
+            break;
+        oss << s.substr(prevPos, pos - prevPos);
+        oss << replaceWith;
+        pos += toReplace.size();
+    }
+
+    oss << s.substr(prevPos);
+    s = oss.str();
 }
