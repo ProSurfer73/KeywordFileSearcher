@@ -1,5 +1,6 @@
 #include <cstring>
 #include <sstream>
+#include <algorithm>
 #include "closestr.hpp"
 
 #ifdef ENABLE_CLOSESTR
@@ -109,4 +110,9 @@ void replace_all(
 
     oss << s.substr(prevPos);
     s = oss.str();
+}
+
+void clearSpaces(std::string& str)
+{
+    str.erase(std::remove_if(str.begin(), str.end(), isspace),str.end());
 }

@@ -6,13 +6,6 @@
 #include "history.hpp"
 #include "closestr.hpp" // case insensitive character comparaison.
 
-static void clearSpaces(std::string& str)
-{
-    str.erase(std::remove_if(str.begin(), str.end(), isspace),str.end());
-}
-
-
-
 /*
  *  Class History
  */
@@ -44,7 +37,7 @@ bool History::loadFromFile(const std::string& str)
         }
         else if(v != nullptr && !lineRead.empty())
         {
-            // Let's not push twice the same value
+            // Let's not push twice the same value.
             if(std::find(v->begin(), v->end(), lineRead) == v->end())
                 v->push_back(lineRead);
         }
@@ -91,12 +84,10 @@ void History::pushHistory(const std::string& name, const std::string& value, boo
 
         for(auto it=p->begin(); it!=p->end(); ++it)
         {
-            if((!caseInsensitive && *it == value)
+            if((*it == value)
              ||(caseInsensitive && equalInsensitive(value, *it)))
             {
                 p->erase(it);
-
-                return;
             }
         }
 
@@ -109,15 +100,10 @@ void History::pushHistory(const std::string& name, const std::string& value, boo
         ///////
         // 3. Delete the last element if there are too many elements.
 
-        if(p->size()>MAX_HISTORY_ENTRY)
+        if(p->size() > getHistoryLimit(name))
         {
             p->pop_back();
         }
-
-        //////
-        // 4. Let's save history (if a change has been done).
-        if(!saveToFile(HISTORY_FILEPATH))
-            std::cout << "Can't save history !" << std::endl;
     }
     else
     {
@@ -183,4 +169,16 @@ void History::writeContentToStream(std::ostream& stream)
             stream << s << std::endl;
         }
     }
+}
+
+
+unsigned History::getHistoryLimit(const std::string& categoryName)
+{
+    // if we talk about directories, let's set the limit to 8.
+    if(categoryName == "directories")
+        return 8;
+
+    // By default, let's return 5 as the maximum number of elements.
+    else
+        return 5;
 }

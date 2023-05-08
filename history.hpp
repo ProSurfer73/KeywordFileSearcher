@@ -9,9 +9,6 @@
 /**< file path where the history is going to be automatically saved and loaded. */
 #define HISTORY_FILEPATH "history.txt"
 
-/**< the maximum number of entries per category. */
-#define MAX_HISTORY_ENTRY 5
-
 
 /**< class dealing with the history of entries typed by the user. */
 class History
@@ -68,6 +65,14 @@ public:
      * \param stream the stream to which the history content should be written to.
      */
     void writeContentToStream(std::ostream& stream);
+
+    /** \brief get the maximum number of element inside history by category.
+     *
+     * \param categoryName the name of the category to be considered.
+     *
+     * \return the maximum number of elements that can be saved inside history.
+     */
+    static unsigned getHistoryLimit(const std::string& categoryName);
 
 private:
     /**< contains the history database. */

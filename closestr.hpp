@@ -1,6 +1,8 @@
 #ifndef CLOSESTR_HPP
 #define CLOSESTR_HPP
 
+/**< File containing basic operations with strings. */
+
 #include <string>
 #include <vector>
 
@@ -45,5 +47,11 @@ bool equalInsensitive(const std::string& str1, const std::string& str2);
  * \param replaceWith the text we are going to replace with the old one.
  */
 void replace_all(std::string& s, std::string const& toReplace, std::string const& replaceWith);
+
+/** \brief Delete space characters from a given string.
+ *
+ * \param str the string to be modified.
+ */
+void clearSpaces(std::string& str);
 
 #endif // CLOSESTR_HPP
