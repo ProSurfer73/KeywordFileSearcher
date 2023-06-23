@@ -9,27 +9,34 @@
 #if defined(__WIN32)||defined(__WIN64)
 
 
-
+static HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 
 void SetDefaultConsoleColor(void)
 {
-    // get the handle of the console
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
     // By default, the text is white and the background is black.
     SetConsoleTextAttribute(hConsole,
                             FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
                           //| BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
 }
 
-void SetSpecialConsoleColor(void)
+void SetSpecialConsoleColor(unsigned colorConsole)
 {
-    // get the handle of the console
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // By default, the text is red and the background is black.
 
-    // By default, the text is white and the background is black.
-    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    WORD mycolor=FOREGROUND_RED;
+
+    switch(colorConsole%6)
+    {
+    case 0: mycolor=FOREGROUND_RED; break;
+    case 1: mycolor=FOREGROUND_GREEN; break;
+    case 2: mycolor=FOREGROUND_BLUE; break;
+    case 3: mycolor=FOREGROUND_RED|FOREGROUND_GREEN; break;
+    case 4: mycolor=FOREGROUND_RED|FOREGROUND_BLUE; break;
+    case 5: mycolor=FOREGROUND_BLUE|FOREGROUND_GREEN; break;
+    }
+
+    SetConsoleTextAttribute(hConsole, mycolor);
                           //| BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED);
 }
 
@@ -58,7 +65,7 @@ void showLineWithKeyword(const std::string& line, const std::string& keyword)
                 std::cout << line[pos];
             }
 
-            SetSpecialConsoleColor();
+            SetSpecialConsoleColor(0);
 
             std::cout << keyword;
 
@@ -115,7 +122,7 @@ void showLineWithKeyword(const std::string& line, const std::vector<std::string>
                 std::cout << line[pos];
             }
 
-            SetSpecialConsoleColor();
+            SetSpecialConsoleColor(keywordNumber);
 
             std::cout << keywords[keywordNumber];
 

@@ -20,11 +20,15 @@ void showLineWithKeyword(const std::string& line, const std::string& keyword);
  */
 void showLineWithKeyword(const std::string& line, const std::vector<std::string>& keywords);
 
-/** \brief let's set the console colors to its default theme. */
+/** \brief let's set the console colors to its default theme.
+ */
 void SetDefaultConsoleColor();
 
-/** \brief let's set a special color to underline certain keywords. */
-void SetSpecialConsoleColor();
+/** \brief let's set a special color to underline certain keywords.
+ *
+ *  \param colorConsole a number from 0 to 6, that corresponds to the color that should be given to the text of the console.
+ */
+void SetSpecialConsoleColor(unsigned consoleColor);
 
 
 #endif // COLORS_HPP
