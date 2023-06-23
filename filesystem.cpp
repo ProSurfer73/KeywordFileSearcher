@@ -272,6 +272,8 @@ bool readFileWithLine(std::string& path, const stringvec& words, const std::vect
                 showLineWithKeyword(readLine, words);
 
                 std::cout << std::endl;
+
+                break;
             }
         }
 
