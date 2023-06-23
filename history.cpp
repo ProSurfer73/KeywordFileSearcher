@@ -7,7 +7,7 @@
 #include "closestr.hpp" // case insensitive character comparaison.
 
 /*
- *  Class History
+ *  Class History.
  */
 
 History::History()
@@ -87,6 +87,10 @@ void History::pushHistory(const std::string& name, const std::string& value, boo
             if((*it == value)
              ||(caseInsensitive && equalInsensitive(value, *it)))
             {
+                // if it is the first option, no need to save the file.
+                if(it == p->begin())
+                    return;
+
                 p->erase(it);
             }
         }

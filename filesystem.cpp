@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <windows.h>
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -9,9 +8,13 @@
 #include "filesystem.hpp"
 #include "operators.hpp"
 #include "closestr.hpp"
+#include "colors.hpp"
 
 
 #if (defined(_WIN32) || defined(_WIN64))
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 void explore_directory(std::string dirname, std::vector<std::string>& files)
 {
@@ -263,7 +266,12 @@ bool readFileWithLine(std::string& path, const stringvec& words, const std::vect
                     output << path << std::endl;
                     found = true;
                 }
-                output << 'l' << lineNumber << ": " << readLine << std::endl;
+                output << 'l' << lineNumber << ": ";
+
+                // let's print the line with the underlined keyword.
+                showLineWithKeyword(readLine, words);
+
+                std::cout << std::endl;
             }
         }
 

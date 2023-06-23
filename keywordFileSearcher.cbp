@@ -37,6 +37,8 @@
 		<Unit filename="background.hpp" />
 		<Unit filename="closestr.cpp" />
 		<Unit filename="closestr.hpp" />
+		<Unit filename="colors.cpp" />
+		<Unit filename="colors.hpp" />
 		<Unit filename="filesystem.cpp" />
 		<Unit filename="filesystem.hpp" />
 		<Unit filename="history.cpp" />

@@ -1,9 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <thread>
-#if (defined(_WIN32) || defined(_WIN64) )
-    #include <windows.h>
-#endif
+#include <windows.h>
 
 #include "filesystem.hpp"
 #include "closestr.hpp"
@@ -11,8 +9,7 @@
 #include "keywords.hpp"
 #include "operators.hpp"
 #include "background.hpp"
-
-using namespace std;
+#include "colors.hpp"
 
 
 // Let's define the absolute path to Notepad++ inside the program.
@@ -27,7 +24,7 @@ void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vecto
     {
         if(ext.front()=='$'){
             listOfExtensionsToKeep = false;
-            ext = ext.substr(1);
+            ext = ext.substr(1); // let's hrink the first character.
         }
     }
 
@@ -112,6 +109,7 @@ void taskExploreDirectory(void *data[])
 
 void taskFilterPathEnding(void *data[])
 {
+    std::cout << "let's filter ! " << std::endl;
     filterFilepathByEnding(*((std::vector<std::string>*)data[0]),
                            *((std::vector<std::string>*)data[1]));
 }
@@ -131,11 +129,19 @@ int main()
         // Let's launch and restart the program as long as the user wants to
         while(launchProgram(history));
     }
+
+    // Let's catch exceptions from the standard library.
     catch(const std::exception& ex)
     {
         std::cout << ex.what() << std::endl;
-        std::string tmp;
-        getline(cin, tmp);
+        while(1);
+    }
+
+    // Let's catch unknown exceptions.
+    catch(...)
+    {
+        std::cout << "!!unknown exception!!" << std::endl;
+        while(1);
     }
 
 
@@ -149,6 +155,8 @@ bool launchProgram(History& history)
     reaskDirectory:
 
     std::cout << "Please type the directory: ";
+
+    SetDefaultConsoleColor();
 
     string input;
     BackgroundTasksManager background;
@@ -250,15 +258,18 @@ bool launchProgram(History& history)
 
 
 
+    // let's launch the path ending filtering task.
+    void *arg2[] = {
+        &fileCollection,
+        &extensionsToKeep
+    };
 
     if(!extensionsToKeep.empty())
     {
-        // let's launch the path ending filtering task.
-        void *arg2[] = {
-            &fileCollection,
-            &extensionsToKeep
-        };
+
+        //background.join();
         background.addTask(taskFilterPathEnding, arg2);
+        //filterFilepathByEnding(fileCollection, extensionsToKeep);
     }
 
 
@@ -269,7 +280,6 @@ bool launchProgram(History& history)
     cout << "\nType 1 to search and 2 to replace (+: print involved lines):" << endl;
 
     std::vector<std::string> warnings;
-    warnings.reserve(fileCollection.size()/5);
 
     getline(cin, input);
 

@@ -67,7 +67,7 @@ bool matchKeywordToLine(const std::string& str, std::string& readLine, bool case
     // if we should ignore spaces with this string
     if(ignoreSpaces)
     {
-        unsigned j=0; //
+        unsigned j=0;
 
         // let's compare the string while ignoring spaces.
         for(unsigned i=1; str[i]!='\0'; i++)
