@@ -267,9 +267,9 @@ bool launchProgram(History& history)
     if(!extensionsToKeep.empty())
     {
 
-        //background.join();
-        background.addTask(taskFilterPathEnding, arg2);
-        //filterFilepathByEnding(fileCollection, extensionsToKeep);
+        background.join();
+        //background.addTask(taskFilterPathEnding, arg2);
+        filterFilepathByEnding(fileCollection, extensionsToKeep);
     }
 
 

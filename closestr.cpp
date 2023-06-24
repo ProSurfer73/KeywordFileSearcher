@@ -64,6 +64,9 @@ bool hasEndingWhatever(const std::string& fullString, const std::string& ending)
 {
     unsigned start = fullString.size()-ending.size();
 
+    if(start<0)
+        return false;
+
     for(unsigned i=1; i<ending.size(); ++i){
         if(toupper(fullString[i+start])!=ending[i])
             return false;
