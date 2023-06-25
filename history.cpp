@@ -92,6 +92,7 @@ void History::pushHistory(const std::string& name, const std::string& value, boo
                     return;
 
                 p->erase(it);
+                break;
             }
         }
 
