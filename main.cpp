@@ -16,15 +16,16 @@
 #define NOTEPADPP_ABSOLUTE_PATH "C:\\Programs\\Notepad++\\notepad++.exe"
 
 
-void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vector<std::string>& extensions)
+void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vector<std::string>& extensions, std::vector<struct SpecialOperators>& sop)
 {
     // Let's check waht type of list it is
     bool listOfExtensionsToKeep = true;
-    for(string& ext : extensions)
+    for(const auto& s : sop)
     {
-        if(ext.front()=='$'){
+        // lets exclude this
+        if(s.exclusionCharacter)
+        {
             listOfExtensionsToKeep = false;
-            ext = ext.substr(1); // let's hrink the first character.
         }
     }
 
@@ -36,10 +37,11 @@ void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vecto
     {
         // Is the extension of the file among the list of extensions to keep
         bool shouldKeep=false;
-        for(const string& curExt : extensions)
+
+        for(unsigned i=0; i<extensions.size(); i++)
         {
-            if((curExt.front()=='#' && hasEndingWhatever(*it, curExt))
-             ||(curExt.front()!='#' && hasEnding(*it, curExt))){
+            if((sop[i].insensitiveCharacter && hasEndingWhatever(*it, extensions[i]))
+             ||(!sop[i].insensitiveCharacter && hasEnding(*it, extensions[i]))){
                 shouldKeep = true;
                 break;
             }
@@ -111,7 +113,8 @@ void taskFilterPathEnding(void *data[])
 {
     std::cout << "let's filter ! " << std::endl;
     filterFilepathByEnding(*((std::vector<std::string>*)data[0]),
-                           *((std::vector<std::string>*)data[1]));
+                           *((std::vector<std::string>*)data[1]),
+                           *((std::vector<struct SpecialOperators>*)data[2]));
 }
 
 bool launchProgram(History& history);
@@ -261,7 +264,8 @@ bool launchProgram(History& history)
     // let's launch the path ending filtering task.
     void *arg2[] = {
         &fileCollection,
-        &extensionsToKeep
+        &extensionsToKeep,
+        &sop
     };
 
     if(!extensionsToKeep.empty())
@@ -269,7 +273,7 @@ bool launchProgram(History& history)
 
         background.join();
         //background.addTask(taskFilterPathEnding, arg2);
-        filterFilepathByEnding(fileCollection, extensionsToKeep);
+        filterFilepathByEnding(fileCollection, extensionsToKeep, sop);
     }
 
 
