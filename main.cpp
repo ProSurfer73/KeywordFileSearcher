@@ -16,6 +16,7 @@
 #define NOTEPADPP_ABSOLUTE_PATH "C:\\Programs\\Notepad++\\notepad++.exe"
 
 
+
 void filterFilepathByEnding(std::vector<std::string>& fileCollection, std::vector<std::string>& extensions, std::vector<struct SpecialOperators>& sop)
 {
     // Let's check waht type of list it is
@@ -111,7 +112,6 @@ void taskExploreDirectory(void *data[])
 
 void taskFilterPathEnding(void *data[])
 {
-    std::cout << "let's filter ! " << std::endl;
     filterFilepathByEnding(*((std::vector<std::string>*)data[0]),
                            *((std::vector<std::string>*)data[1]),
                            *((std::vector<struct SpecialOperators>*)data[2]));
@@ -192,7 +192,7 @@ bool launchProgram(History& history)
 
     // vector of keywords and their parameters
     std::vector<std::string> keywords;
-    std::vector<struct SpecialOperators> sop;
+    std::vector<struct SpecialOperators> sop, sop2;
 
 
     std::cout << std::endl;
@@ -213,10 +213,9 @@ bool launchProgram(History& history)
             else if(savedDirectory)
             {
                 history.tryPossibilities(input, "search");
-                auto p = analyseKeyword(input);
-                keywords.emplace_back(input);
-                sop.push_back(p);
                 history.pushHistory("search", input);
+                sop.push_back(analyseKeyword(input));
+                keywords.emplace_back(input);
             }
             else
             {
@@ -250,8 +249,9 @@ bool launchProgram(History& history)
             else
             {
                 history.tryPossibilities(input, "extension");
-                extensionsToKeep.emplace_back(input);
                 history.pushHistory("extension", input, true);
+                sop2.push_back(analyseKeyword(input));
+                extensionsToKeep.emplace_back(input);
             }
         }
 
@@ -265,7 +265,7 @@ bool launchProgram(History& history)
     void *arg2[] = {
         &fileCollection,
         &extensionsToKeep,
-        &sop
+        &sop2
     };
 
     if(!extensionsToKeep.empty())
@@ -273,7 +273,7 @@ bool launchProgram(History& history)
 
         background.join();
         //background.addTask(taskFilterPathEnding, arg2);
-        filterFilepathByEnding(fileCollection, extensionsToKeep, sop);
+        filterFilepathByEnding(fileCollection, extensionsToKeep, sop2);
     }
 
 
